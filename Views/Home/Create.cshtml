@@ -1,0 +1,305 @@
+﻿
+
+
+
+<div>
+    <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Close" onclick="PopUp()">
+        Add New
+    </button>
+
+    <div id="Dodawanie">
+
+    </div>
+    @Html.Partial("~/Views/Master/NewComponent.cshtml")
+
+
+</div>
+
+<div>
+    <div id="compDiv">
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<style>
+    .base
+    {
+        z-index:8 ;
+    }
+    
+    .overbase
+    {
+        border-radius:18px;
+        z-index: 9;
+        top:15px;
+        left:40px;
+        position: absolute;
+        opacity: 0.6;
+        display: none;
+        background-color:black;
+
+        color:white;
+        padding-bottom: 30px;
+    }
+
+.button {
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+        position: relative;
+        padding: 10px 24px;
+ }
+       
+
+ .button_Veg {
+        background-color: #4CAF50;
+    }
+
+    .button_Meat {
+        background-color: #B22222;
+    }
+
+    .button_Fruit {
+        background-color: #ADFF2F;
+    }
+
+    .button_Other {
+        background-color: #F08080;
+    }
+
+
+
+
+        .compInf{
+            background-color: darkgreen;
+        padding: 25px 32px;
+        margin: 4px 2px;
+        }
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+@section Scripts{
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+
+
+
+     <script>
+
+         $(document).ready(function(){
+
+             Load_Components();
+
+
+
+
+           
+
+           });
+
+
+
+
+
+           function Load_Components()
+           {
+
+                $.ajax({
+                cache: false,
+                type: "GET",
+                url: "GetAllComponents",
+                success: function (data) {
+
+                    var result = "";
+                    var compDiv = $("#compDiv");  
+
+                   $.each(data, function (id, Component) {
+
+                       let BG_Color;
+
+                        switch (Component.type) {
+                            case 0:
+                                BG_Color = "button_Veg";
+                              break;
+                            case 1:
+                                BG_Color = "button_Meat"
+                              break;
+                            case 2:
+                                BG_Color = "button_Fruit"
+                              break;
+                            case 3:
+                                BG_Color = "button_Other"
+                              break;
+                            default:
+                                console.log(`Sorry, we are out of ${expr}.`);
+
+
+
+                       }
+                        result +=
+                            '<button class="button ' + BG_Color + ' "  id="CompButt"  val="'+ Component.id + '" onmouseover="Show_more_Info(this)"  onmouseout="Hide_more_Info(this)" >' +
+                        '<div class="overbase">'+
+
+                            'Kalorie:' + Component.calories +  '<br />'+
+                            'Białko:' + Component.protein +  '<br />'+
+                            'Węglowodany:' + Component.carbohydrates +
+                            ' </div>'+
+                            '<div class="base">'+
+                            '<img src=' + '/Uploads/Constant/' + Component.name + '.jpeg' + '   ' + 'width = "150" height = "100" />' +
+                            '<br />'+
+                            Component.name +
+                            '</div>'+
+                            '   </button>';
+                    });  
+
+                    compDiv.html(result);
+                    $("#TempImg").remove();
+                     
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve books.');
+                }
+            });
+
+           }
+           function Show_more_Info(element)
+            {
+            console.log(element.children[0].style);
+
+                     element.children[0].style.display = "initial";
+
+            }
+           function Hide_more_Info(element)
+            {
+            element.children[0].style.display = "none";
+            }
+
+     </script>
+
+
+
+
+
+    <script>
+
+        var imagepath = '';
+        var _Image = "<img class='img-responsive img-thumbnail' style='height:500ph;width:500px' onclick='OpenPopup(this);return false' src='" + imagepath + "' />";
+        var CurrentImage;
+        function OpenPopup(element) {
+            CurrentImage = $(element);
+            var employeecode = CurrentImage.closest('tr').find("#hdncode").val();
+            $('#currentemcode').val(employeecode);
+            $('#btnpopup').trigger('click');
+        }
+        function Temp_FunctionUpload() {
+
+            var uploadfile = $('#imageupload').get(0);
+            //console.log(uploadfile);
+
+
+
+            var files = uploadfile.files;
+
+            var filedata = new FormData();
+
+            var empcode = $('#currentemcode').val();
+
+
+
+
+            for (var i = 0; i < files.length; i++) {
+                filedata.append(empcode, files[i]);
+            }
+
+
+
+            $.ajax({
+                url: 'Temp_UploadImage',
+                type: 'POST',
+                data: filedata,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result == 'pass') {
+                        var Tempora = "<input type='file' onchange='Temp_FunctionUpload()' accept='images/*' id='imageupload' class='custom-file-input' />  <br />  <img class='img-responsive img - thumbnail'  id='TempImg'  style='height: 200px; width: 200px' src='/Uploads/Temporary/1.jpeg'/>";
+                        $('#TemporaryImg').html(Tempora);
+
+                    }
+                },
+                error: function () {
+                    alert("COS zle");
+                }
+            });
+        }
+        function AddComponent() {
+            if ($("#ComponentForm").valid()) {
+                var formData = $("#ComponentForm").serialize();               
+
+                $.ajax({
+                    url: "/Home/SaveComponent",
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        hideModal();
+                        $('#ComponentForm')[0].reset();
+                        Load_Components();
+
+                    },
+                    error: function (request, status, error) {
+                        alert(request.responseText);
+                    }
+
+                });
+
+
+
+
+
+            }
+        }
+        function PopUp()
+    {
+
+        $('#uploadModel').modal('show');
+
+    }
+        function hideModal() {
+            $('#uploadModel').modal('hide');
+        }
+    </script>
+
+
+}

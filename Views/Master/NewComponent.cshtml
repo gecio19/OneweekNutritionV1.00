@@ -1,0 +1,149 @@
+﻿@using OneweekNutrition.Models
+
+@model OneweekNutrition.Models.Component
+
+
+
+
+
+<div class="modal fade" id="uploadModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+    <form id="ComponentForm">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Dodaj Składnik</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="hideModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+
+
+
+     <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <br /> 
+                            <label>Rodzaj</label>
+                            <select asp-for="Type" class="form-control" id="ComponentType">
+                                <option value="0">Wybierz rodzaj</option>
+                                <option value="1">Mięso</option>
+                                <option value="2">Warzywo</option>
+                                <option value="3">Owoc</option>
+                                <option value="4">Inne</option>
+                            </select>
+
+                            <label> Nazwa</label>
+                            <input asp-for="Name" class="form-control" id="ComponentName"  autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Name"></span>
+
+
+                            <label>Białko</label>
+                            <input asp-for="Protein" class="form-control" id="ComponentProtein" type="number" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Protein"></span>
+
+                            <label>Wegle</label>
+                            <input asp-for="Carbohydrates" class="form-control" id="ComponentCarbohydrates" type="number" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Carbohydrates"></span>
+
+                            <label>Kalorie</label>
+                            <input asp-for="Calories" class="form-control" id="ComponentCalories" type="number" autocomplete="off" />
+                            <span class="text-danger" asp-validation-for="Calories"></span>
+
+            </div>
+
+            <div  class="col-md-6" id="TemporaryImg">
+                
+                        <input type="file" onchange="Temp_FunctionUpload()" accept="images/*" id="imageupload" class="custom-file-input" />
+                    </div>
+          </div>
+    </div>
+            <div class="modal-footer">
+                <a href="#" onclick="AddComponent()" class="btn btn-success" data-dismiss="modal">Dodaj</a>
+                <input type="hidden" id="currentemcode" value="1" />
+                    </div>
+
+                </div>
+            </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+<style>
+    /*                                          INPUT                       */
+
+
+    .custom-file-input {
+  color: transparent;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select some files';
+  color: black;
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+body {
+  padding: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+    
+    /*                                              KOLUMNY                                          */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    /* Create two equal columns that sits next to each other */
+    .column {
+        flex: 50%;
+        padding: 10px;
+        height: 300px; /* Should be removed. Only for demonstration */
+    }
+
+</style>
