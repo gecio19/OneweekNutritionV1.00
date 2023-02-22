@@ -1,21 +1,51 @@
 ﻿
 
 
+<div id="mySidenav" class="sidenav ">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+   
+</div>
+
+
+
+
+
 
 <div>
     <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Close" onclick="PopUp()">
         Add New
     </button>
 
+    <span onclick="openNav()">open</span>
+
+
+
+
     <div id="Dodawanie">
 
     </div>
     @Html.Partial("~/Views/Master/NewComponent.cshtml")
-
-
 </div>
 
+
 <div>
+
+    <button class="button" id="CompButt" value="44"  onclick="CreatRecipe(this)"  onmouseover="Show_more_Info(this)" onmouseout="Hide_more_Info(this)">
+        <div class="overbase">
+            Pewnego ranka
+            twoja stara narka
+            twoja stara narka
+            twoja stara narka
+            twoja stara narka
+        </div>
+        <div class="base">
+            <img src="~/Uploads/Constant/1.jpeg" width="150" height="100" />
+            <br />
+            Button
+        </div>
+    </button>
+
+
     <div id="compDiv">
 
 
@@ -31,6 +61,126 @@
 
 
 
+
+<style>
+
+    .RecipBarH_01{
+    padding-left:10px;
+  text-decoration: none;
+  font-size: 12px;
+  margin-left:40%;
+  color: #DC143C;
+  display: block;
+  transition: 0.3s;
+}
+
+    .RecipBarH_02 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #FFFF00;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .RecipBarH_03 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #00BFFF;
+        display: block;
+        transition: 0.3s;
+    }
+
+
+    .ProggresBarS {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .iNSIDEbar {
+        margin-left: 27%;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* The side navigation menu */
+.sidenav {
+  height: 90%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 55px; /* Stay at the top */
+
+  right:0px;
+
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.RecipNavline{
+    padding-left:10px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+    .RecipNavlineInp {
+        width: 30%;
+    }
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 36px;
+  margin-left: 0px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+</style>
+
+
+<script>
+    /* Set the width of the side navigation to 250px */
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    /* Set the width of the side navigation to 0 */
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+</script>
 
 
 <style>
@@ -101,12 +251,6 @@
 </style>
 
 
-
-
-
-
-
-
 @section Scripts{
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -114,17 +258,13 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 
-
-
      <script>
+
+         
 
          $(document).ready(function(){
 
              Load_Components();
-
-
-
-
            
 
            });
@@ -169,7 +309,7 @@
 
                        }
                         result +=
-                            '<button class="button ' + BG_Color + ' "  id="CompButt"  val="'+ Component.id + '" onmouseover="Show_more_Info(this)"  onmouseout="Hide_more_Info(this)" >' +
+                            '<button class="button ' + BG_Color + ' "  id="CompButt"  value="' + Component.id + '" onmouseover="Show_more_Info(this)" onclick="CreatRecipe(this)"  onmouseout="Hide_more_Info(this)" >' +
                         '<div class="overbase">'+
 
                             'Kalorie:' + Component.calories +  '<br />'+
@@ -197,7 +337,6 @@
            }
            function Show_more_Info(element)
             {
-            console.log(element.children[0].style);
 
                      element.children[0].style.display = "initial";
 
@@ -208,11 +347,6 @@
             }
 
      </script>
-
-
-
-
-
     <script>
 
         var imagepath = '';
@@ -299,7 +433,92 @@
         function hideModal() {
             $('#uploadModel').modal('hide');
         }
-    </script>
 
+
+
+        const CompIdArr = [];
+
+        function CreatRecipe(element)
+        {
+
+            if (!CompIdArr.includes(element.value))
+            {
+                CompIdArr.push(element.value);
+
+
+               $.ajax({
+                    url: 'Calc_Recip',
+                    type: 'POST',
+                    data: { CompIdArr: CompIdArr },
+                    success: function (Component) {
+
+                        var result = '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>';
+                        var ComBar = $("#mySidenav");
+
+
+                        $.each(Component, function (id, item) {
+
+                            result +=
+
+                                '<p class= "RecipNavline">' + item.name + '<input class="RecipNavlineInp" />' + '</p>';
+                        });
+
+
+
+                        result += '<h5 class="RecipNavline"> Opis </h5>' +
+
+                        ' <textarea class="form-control" aria-label="With textarea"></textarea>';
+
+
+
+
+
+
+                        //////////////////////////TESTOWO/////////////////////////////////////
+
+                        result += 
+                        '  <h3 class="RecipBarH_01">Kalorie</h3>' +
+                            '<div class="progress ProggresBarS">'+
+                            '<div class="progress-bar progress-bar-striped bg-success iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '</div>'+
+                            '<br />'+
+                            '<h3 class="RecipBarH_02">Białka</h3>'+
+                            '<div class="progress ProggresBarS">'+
+                            '<div class="progress-bar progress-bar-striped bg-warning iNSIDEbar" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '</div>'+
+                            '<br />'+
+                            '<h3 class="RecipBarH_03">Węglowodany</h3>'+
+                            '<div class="progress ProggresBarS">'+
+                            '<div class="progress-bar progress-bar-striped bg-info iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '</div>'+
+                            '</br>';
+
+
+
+
+
+
+                        ////////////////////////////////////////////////////////////////////
+
+                        ComBar.html(result);
+                        console.log(Component);
+
+
+
+                        
+                    },
+                   
+                });
+
+
+            }
+
+        }
+
+
+
+
+
+    </script>
 
 }

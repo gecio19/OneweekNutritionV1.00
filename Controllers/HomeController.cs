@@ -21,6 +21,14 @@ namespace OneweekNutrition.Controllers
             webHostEnvironment = IWebHostEnvironment;
         }
 
+
+
+        public IActionResult Test()
+        {
+            return View();
+        }
+
+
         public IActionResult Index()
         {
             return View();
@@ -58,15 +66,15 @@ namespace OneweekNutrition.Controllers
 
         private string Replace_Img(string Img_Name)
         {
-                
+
             string filename = "1.jpeg";
 
 
-             string imagepath = GetActualpath(filename);
+            string imagepath = GetActualpath(filename);
 
             string R_imagepath = imagepath.Replace("Temporary", "Constant").Replace("1.jpeg", Img_Name + ".jpeg");
 
-            if (System.IO.File.Exists(imagepath)) 
+            if (System.IO.File.Exists(imagepath))
             {
                 System.IO.File.Copy(imagepath, R_imagepath);
                 System.IO.File.Delete(imagepath);
@@ -76,7 +84,6 @@ namespace OneweekNutrition.Controllers
             return R_imagepath;
 
         }
-
 
 
 
@@ -93,9 +100,9 @@ namespace OneweekNutrition.Controllers
                 string FileName = source.Name + ".jpeg";
 
                 string imagepath = String.Empty;
-               
-                    imagepath  = GetActualpath(FileName);
-              
+
+                imagepath = GetActualpath(FileName);
+
 
                 //sprawdzanie czy plik istnieje w folderze ezeli tak to usuwamy
 
@@ -139,10 +146,6 @@ namespace OneweekNutrition.Controllers
 
         #endregion
 
-
-
-
-
         #region GetComponent
 
         public JsonResult GetAllComponents()
@@ -155,12 +158,12 @@ namespace OneweekNutrition.Controllers
 
 
 
-           /* foreach (var item in Componentts)
-            {
-                if(item.ImgPath != null)
-                item.ImgPath.Replace('\\', '/');
+            /* foreach (var item in Componentts)
+             {
+                 if(item.ImgPath != null)
+                 item.ImgPath.Replace('\\', '/');
 
-            }*/
+             }*/
 
             return Json(Componentts);
         }
@@ -171,6 +174,51 @@ namespace OneweekNutrition.Controllers
 
         #endregion
 
+
+
+        #region CreatingRecip
+
+        public JsonResult Calc_Recip(string[] CompIdArr)
+        {
+           
+
+            int[] ListCompID = new int[CompIdArr.Length];
+
+
+            for (int i = 0; i < CompIdArr.Length; i++)
+            {
+                ListCompID[i] = Int32.Parse(CompIdArr[i]);
+            }
+
+
+
+            var Components = new List<Component>();
+
+            for (int i = 0; i < CompIdArr.Length; i++)
+            {
+                var element = _context.Component.Where(b => b.Id == ListCompID[i]).FirstOrDefault();
+                Components.Add(element);
+
+            }
+
+
+
+
+            return Json(Components);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
 
     }
 }

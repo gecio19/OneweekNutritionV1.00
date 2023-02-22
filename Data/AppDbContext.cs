@@ -13,7 +13,7 @@ namespace OneweekNutrition.Data
 
         public DbSet<Component> Component { get; set; }
 
-
+        public DbSet<Recipe> Recipes { get; set; }
 
 
     }
