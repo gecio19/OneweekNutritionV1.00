@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OneweekNutrition.Data;
 
@@ -10,9 +11,10 @@ using OneweekNutrition.Data;
 namespace OneweekNutrition.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227162111_manytomany")]
+    partial class manytomany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,9 +57,6 @@ namespace OneweekNutrition.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("RecipId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("CompId", "RecipId");

@@ -26,6 +26,9 @@ namespace OneweekNutrition.Models
         public Types Type { get; set; }
 
         public string? ImgPath { get; set; }
+
+        public ICollection<RecipComponent>  Recips { get; set; }
+
     }
 
 

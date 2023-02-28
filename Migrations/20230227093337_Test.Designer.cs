@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OneweekNutrition.Data;
 
@@ -10,9 +11,10 @@ using OneweekNutrition.Data;
 namespace OneweekNutrition.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227093337_Test")]
+    partial class Test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,30 +43,17 @@ namespace OneweekNutrition.Migrations
                     b.Property<float>("Protein")
                         .HasColumnType("float");
 
+                    b.Property<int?>("RecipeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RecipeId");
+
                     b.ToTable("Component");
-                });
-
-            modelBuilder.Entity("OneweekNutrition.Models.RecipComponent", b =>
-                {
-                    b.Property<int>("CompId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.HasKey("CompId", "RecipId");
-
-                    b.HasIndex("RecipId");
-
-                    b.ToTable("RecipComponent");
                 });
 
             modelBuilder.Entity("OneweekNutrition.Models.Recipe", b =>
@@ -79,10 +68,6 @@ namespace OneweekNutrition.Migrations
                     b.Property<int?>("Carbohydrates")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -95,33 +80,16 @@ namespace OneweekNutrition.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("OneweekNutrition.Models.RecipComponent", b =>
-                {
-                    b.HasOne("OneweekNutrition.Models.Component", "Component")
-                        .WithMany("Recips")
-                        .HasForeignKey("CompId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OneweekNutrition.Models.Recipe", "Recipe")
-                        .WithMany("Components")
-                        .HasForeignKey("RecipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Component");
-
-                    b.Navigation("Recipe");
-                });
-
             modelBuilder.Entity("OneweekNutrition.Models.Component", b =>
                 {
-                    b.Navigation("Recips");
+                    b.HasOne("OneweekNutrition.Models.Recipe", null)
+                        .WithMany("CompList")
+                        .HasForeignKey("RecipeId");
                 });
 
             modelBuilder.Entity("OneweekNutrition.Models.Recipe", b =>
                 {
-                    b.Navigation("Components");
+                    b.Navigation("CompList");
                 });
 #pragma warning restore 612, 618
         }

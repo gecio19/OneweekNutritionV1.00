@@ -3,6 +3,7 @@ using OneweekNutrition.Data;
 using OneweekNutrition.Models;
 using System;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace OneweekNutrition.Controllers
@@ -31,6 +32,7 @@ namespace OneweekNutrition.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -180,7 +182,7 @@ namespace OneweekNutrition.Controllers
 
         public JsonResult Calc_Recip(string[] CompIdArr)
         {
-           
+
 
             int[] ListCompID = new int[CompIdArr.Length];
 
@@ -211,6 +213,61 @@ namespace OneweekNutrition.Controllers
 
 
 
+
+
+
+
+
+
+
+        #endregion
+
+
+
+
+        #region UpdateRecip
+
+
+        public JsonResult UploadRecip(string recipName, string recipDes, string[] compIds, string[] compweights)
+        {
+            Recipe recipe = new Recipe();
+            recipe.Name = recipName;
+            recipe.Description = recipDes;
+
+
+            RecipComponent[] Recips_connect = new RecipComponent[compIds.Length];
+
+           
+
+            for (int i = 0; i < compIds.Length; i++)
+            {
+                RecipComponent S_connect = new RecipComponent();
+                int indeks = Int32.Parse(compIds[i]);
+                S_connect.Recipe = recipe;
+                S_connect.Component = _context.Component.FirstOrDefault(x => x.Id == indeks);
+
+
+                int weight = Int32.Parse(compweights[i]);
+
+                S_connect.Weight = weight;
+
+
+                Recips_connect[i] = S_connect;
+            }
+
+            recipe.Components= Recips_connect;
+
+            _context.Recipes.Add(recipe);
+            _context.SaveChanges();
+
+            //Przenoszenia zdjecia dodać !!!!!!!!
+
+
+
+
+
+            return Json("Tescik");
+        }
 
 
 

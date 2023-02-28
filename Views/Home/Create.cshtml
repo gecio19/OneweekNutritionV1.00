@@ -4,7 +4,17 @@
 <div id="mySidenav" class="sidenav ">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
    
+
+
+
+        <div id="weightComp" onchange="RefreshBars()">
+
+
+        </div>
 </div>
+
+
+
 
 
 
@@ -16,7 +26,7 @@
         Add New
     </button>
 
-    <span onclick="openNav()">open</span>
+    <button class="button_showNav" style="--color:#f3738a;--border:2px;--slant:.5em" onclick="openNav()">Show</button>
 
 
 
@@ -29,30 +39,8 @@
 
 
 <div>
-
-    <button class="button" id="CompButt" value="44"  onclick="CreatRecipe(this)"  onmouseover="Show_more_Info(this)" onmouseout="Hide_more_Info(this)">
-        <div class="overbase">
-            Pewnego ranka
-            twoja stara narka
-            twoja stara narka
-            twoja stara narka
-            twoja stara narka
-        </div>
-        <div class="base">
-            <img src="~/Uploads/Constant/1.jpeg" width="150" height="100" />
-            <br />
-            Button
-        </div>
-    </button>
-
-
-    <div id="compDiv">
-
-
-
-
+    <div id="compDiv" >
     </div>
-
 </div>
 
 
@@ -62,17 +50,69 @@
 
 
 
+
+
+<style #ButtonNavBar>
+    .button_showNav {
+        position: absolute;
+        right: 0;
+        top: 20%;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+        --border: 5px; /* the border width */
+        --slant: 0.7em; /* control the slanted corners */
+        --color: #37E8FC; /* the color */
+
+        font-size: 16px;
+        padding: 0.4em 1.2em;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        color: var(--color);
+        background: linear-gradient(to bottom left,var(--color) 50%,#0000 50.1%) top right, linear-gradient(to top right,var(--color) 50%,#0000 50.1%) bottom left;
+        background-size: calc(var(--slant) + 1.3*var(--border)) calc(var(--slant) + 1.3*var(--border));
+        background-repeat: no-repeat;
+        box-shadow: 0 0 0 200px inset var(--s,#0000), 0 0 0 var(--border) inset var(--color);
+        clip-path: polygon(0 0, calc(100% - var(--slant)) 0, 100% var(--slant), 100% 100%, var(--slant) 100%,0 calc(100% - var(--slant)) );
+        transition: color var(--t,0.3s), background-size 0.3s;
+    }
+
+        .button_showNav:focus-visible {
+            outline-offset: calc(-1*var(--border));
+            outline: var(--border) solid #000c;
+            clip-path: none;
+            background-size: 0 0;
+        }
+
+        .button_showNav:hover,
+        .button_showNav:active {
+            background-size: 100% 100%;
+            color: #fff;
+            --t: 0.2s 0.1s;
+        }
+
+        .button_showNav:active {
+            --s: #0005;
+            transition: none;
+        }
+
+
+</style>
+
 <style>
 
-    .RecipBarH_01{
-    padding-left:10px;
-  text-decoration: none;
-  font-size: 12px;
-  margin-left:40%;
-  color: #DC143C;
-  display: block;
-  transition: 0.3s;
-}
+    .RecipBarH_01 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #DC143C;
+        display: block;
+        transition: 0.3s;
+    }
 
     .RecipBarH_02 {
         padding-left: 10px;
@@ -118,70 +158,180 @@
 
 
     /* The side navigation menu */
-.sidenav {
-  height: 90%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Stay on top */
-  top: 55px; /* Stay at the top */
+    .sidenav {
+        height: 90%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 55px; /* Stay at the top */
 
-  right:0px;
+        right: 0px;
+        background-color: #111; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    }
 
-  background-color: #111; /* Black*/
-  overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
-  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-}
-
-/* The navigation menu links */
-.RecipNavline{
-    padding-left:10px;
-  text-decoration: none;
-  font-size: 12px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
+    /* The navigation menu links */
+    .RecipNavline {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
 
     .RecipNavlineInp {
         width: 30%;
     }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-  color: #f1f1f1;
-}
+    /* When you mouse over the navigation links, change their color */
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
 
-/* Position and style the close button (top right corner) */
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 36px;
-  margin-left: 0px;
-}
+    /* Position and style the close button (top right corner) */
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 36px;
+        margin-left: 0px;
+    }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-  transition: margin-left .5s;
-  padding: 20px;
-}
+    /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+    #main {
+        transition: margin-left .5s;
+        padding: 20px;
+    }
 
 </style>
 
 
-<script>
-    /* Set the width of the side navigation to 250px */
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
+<style>
+        .subButtonRecip{
+        margin:10px;
+            position:relative;
+            left:50%;
     }
 
-    /* Set the width of the side navigation to 0 */
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-    }
-</script>
 
+    .RecipBarH_01 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #DC143C;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .RecipBarH_02 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #FFFF00;
+        display: block;
+        transition: 0.3s;
+    }
+
+    .RecipBarH_03 {
+        padding-left: 10px;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 40%;
+        color: #00BFFF;
+        display: block;
+        transition: 0.3s;
+    }
+
+
+    .ProggresBarS {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .iNSIDEbar {
+        margin-left: 27%;
+    }
+
+
+
+
+
+
+    /* The side navigation menu */
+    .sidenav {
+        height: 90%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 55px; /* Stay at the top */
+
+        right: 0px;
+        background-color: #111; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    }
+
+    .RecipNavlineInp {
+        width: 30%;
+    }
+
+    .RecipNavlineInpDesc {
+        margin: 20%;
+        width: auto;
+        height: auto;
+    }
+
+
+
+
+    /* The navigation menu links */
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 12px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+
+
+    .sidenav p {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 12px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+
+
+    /* When you mouse over the navigation links, change their color */
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+
+    /* Position and style the close button (top right corner) */
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 36px;
+        margin-left: 0px;
+    }
+
+    /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+    #main {
+        transition: margin-left .5s;
+        padding: 20px;
+    }
+
+</style>
 
 <style>
     .base
@@ -251,6 +401,207 @@
 </style>
 
 
+
+<script #AddR_IMG& UploadRec>
+    function Temp_RecipImg() {
+
+        var uploadfile = $('#imageupload').get(0);
+        //console.log(uploadfile);
+        var files = uploadfile.files;
+        var filedata = new FormData();
+        var empcode = "2";
+        for (var i = 0; i < files.length; i++) {
+            filedata.append(empcode, files[i]);
+        }
+        $.ajax({
+            url: 'Temp_UploadImage',
+            type: 'POST',
+            data: filedata,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result == 'pass') {
+                }
+            },
+            error: function () {
+                alert("COS zle");
+            }
+        });
+    }
+</script>
+
+
+
+
+
+<script #BarAction+UploadingRecip>
+
+    let Product_weights = []; //DEklracja tablicy z string wag
+    let Product_prop = [];
+
+
+    let Product_ids = [];
+
+
+    function RefreshBars() {
+
+        
+        Product_weights = []; //DEklracja tablicy z string wag
+        Product_prop = [];
+        Product_ids = [];
+
+
+
+        $('#weightComp').children('p').each(function () {
+            Product_prop.push($(this).attr('value'));
+            Product_weights.push($(this).children('input')[0].value);
+            Product_ids.push($(this).attr('compid'));
+        });
+
+        // console.log(Product_weights);
+        //console.log(Product_prop);
+
+
+        let Cal = [];
+        let Prot = [];
+        let Carbo = [];
+
+        for (let i = 0; i < Product_prop.length; i++) {
+            let words = Product_prop[i].split('&');
+            Cal.push(words[0]);
+            Prot.push(words[1]);
+            Carbo.push(words[2]);
+        }
+
+
+        let TotalCal = 0;
+        let TotalProt = 0;
+        let TotalCarbo = 0;
+
+
+
+
+
+
+        // Zmiana string
+        for (let i = 0; i < Product_weights.length; i++) {
+            Product_weights[i] = Number(Product_weights[i]);
+            Cal[i] = Number(Cal[i]);
+            Prot[i] = Number(Prot[i]);
+            Carbo[i] = Number(Carbo[i]);
+
+
+            TotalCal += Product_weights[i] * Cal[i] * 0.1;
+            TotalProt += Product_weights[i] * Prot[i] * 0.1;
+            TotalCarbo += Product_weights[i] * Carbo[i] * 0.1;
+        }
+
+
+
+        //console.log(TotalCal);
+        //console.log(TotalProt);
+        //console.log(TotalCarbo);
+
+
+        $("#CalBar").text(TotalCal.toFixed(1));
+        $("#ProtBar").text(TotalProt.toFixed(1));
+        $("#CarbBar").text(TotalCarbo.toFixed(1));
+
+    };
+
+
+
+
+
+
+
+
+
+    function UploadRecips()
+    {
+        //console.log(Product_weights);
+        //console.log(Product_ids);
+
+
+
+        var Recip_N = $('#RecipName').val();  // +
+                                            // Produc id and Produc weight
+        var Recip_Des = $('#RecipDesc').val(); // +
+
+                                       
+
+        let formData = {
+
+            recipName: Recip_N,
+            recipDes: Recip_Des,
+            compIds: Product_ids,
+            compweights :Product_weights
+        }
+
+
+        // Wysyłanie
+        console.log(formData);
+
+
+
+        $.ajax({
+            url: 'UploadRecip',
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+
+                $("#RecipName").html("");
+                $("#weightComp").html("");
+                CompIdArr = [];
+
+
+                alert(result);
+            },
+            error: function () {
+                alert("COS zle");
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+    /* Set the width of the side navigation to 250px */
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    /* Set the width of the side navigation to 0 */
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+
+
+
+
+
+
+
+</script>
+
+
+
+
 @section Scripts{
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -258,7 +609,12 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 
-     <script>
+
+
+
+
+
+     <script #bar>
 
          
 
@@ -347,7 +703,7 @@
             }
 
      </script>
-    <script>
+    <script >
 
         var imagepath = '';
         var _Image = "<img class='img-responsive img-thumbnail' style='height:500ph;width:500px' onclick='OpenPopup(this);return false' src='" + imagepath + "' />";
@@ -436,7 +792,8 @@
 
 
 
-        const CompIdArr = [];
+
+        let CompIdArr = [];
 
         function CreatRecipe(element)
         {
@@ -452,22 +809,30 @@
                     data: { CompIdArr: CompIdArr },
                     success: function (Component) {
 
-                        var result = '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>';
-                        var ComBar = $("#mySidenav");
+                        var result = '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>'+
+                            '<input type="email" class="form-control" id = "RecipName" aria - describedby="emailHelp" placeholder = "Nazwa Przepisu" >';
+                        
+                        var ComBar = $("#weightComp");
 
 
                         $.each(Component, function (id, item) {
 
                             result +=
-
-                                '<p class= "RecipNavline">' + item.name + '<input class="RecipNavlineInp" />' + '</p>';
+                                '<p CompId=' + item.id + '   ' + ' value="' + item.calories + '&' + item.protein + '&' + item.carbohydrates + '" >' + item.name +
+                                '<input  accept="number" class="RecipNavlineInp"  />'+
+                                '[G]'+
+                                ' </p>';
                         });
+
+
 
 
 
                         result += '<h5 class="RecipNavline"> Opis </h5>' +
 
-                        ' <textarea class="form-control" aria-label="With textarea"></textarea>';
+                        ' <textarea id = "RecipDesc" class="form-control" aria-label="With textarea"></textarea>' + 
+
+                        '<input type=' + "'file'" +  'onchange="Temp_RecipImg()" accept="images/*" id="imageupload" class="custom-file-input" />';
 
 
 
@@ -479,18 +844,19 @@
                         result += 
                         '  <h3 class="RecipBarH_01">Kalorie</h3>' +
                             '<div class="progress ProggresBarS">'+
-                            '<div class="progress-bar progress-bar-striped bg-success iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '<div id="CalBar" class="progress-bar progress-bar-striped bg-success iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0</div>' +
                             '</div>'+
                             '<br />'+
                             '<h3 class="RecipBarH_02">Białka</h3>'+
                             '<div class="progress ProggresBarS">'+
-                            '<div class="progress-bar progress-bar-striped bg-warning iNSIDEbar" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '<div id="ProtBar" class="progress-bar progress-bar-striped bg-warning iNSIDEbar" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0</div>' +
                             '</div>'+
                             '<br />'+
                             '<h3 class="RecipBarH_03">Węglowodany</h3>'+
                             '<div class="progress ProggresBarS">'+
-                            '<div class="progress-bar progress-bar-striped bg-info iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">130</div>'+
+                            '<div id="CarbBar" class="progress-bar progress-bar-striped bg-info iNSIDEbar " role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0</div>' +
                             '</div>'+
+                            '<button type="button" onclick="UploadRecips()" class="btn btn-success subButtonRecip">Zapis</button>' +
                             '</br>';
 
 
@@ -501,7 +867,7 @@
                         ////////////////////////////////////////////////////////////////////
 
                         ComBar.html(result);
-                        console.log(Component);
+                        //console.log(Component);
 
 
 
