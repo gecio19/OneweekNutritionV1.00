@@ -5,9 +5,21 @@ using System;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+
+
+
+
+
+
 
 namespace OneweekNutrition.Controllers
 {
+
+    [Authorize] // You can only enter Home if you are loggged in
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,6 +34,18 @@ namespace OneweekNutrition.Controllers
             webHostEnvironment = IWebHostEnvironment;
         }
 
+        
+
+
+
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login","Access");
+        }
+
+
+
 
 
         public IActionResult Test()
@@ -35,6 +59,44 @@ namespace OneweekNutrition.Controllers
 
             return View();
         }
+
+
+
+
+        #region GetAllRecips
+
+
+        [HttpGet]
+        public JsonResult ShowAllRecips()
+        {
+            var Recips = _context.Recipes.ToList();
+
+
+
+
+
+
+
+
+
+            return Json(Recips);
+        }
+
+
+
+
+
+
+
+
+        #endregion
+
+
+
+
+
+
+        #region Componentcreating
 
         public IActionResult Create()
         {
@@ -87,7 +149,7 @@ namespace OneweekNutrition.Controllers
 
         }
 
-
+        #endregion
 
         #region Images
 
@@ -176,8 +238,6 @@ namespace OneweekNutrition.Controllers
 
         #endregion
 
-
-
         #region CreatingRecip
 
         public JsonResult Calc_Recip(string[] CompIdArr)
@@ -223,21 +283,33 @@ namespace OneweekNutrition.Controllers
         #endregion
 
 
-
-
         #region UpdateRecip
 
 
-        public JsonResult UploadRecip(string recipName, string recipDes, string[] compIds, string[] compweights)
+        public JsonResult UploadRecip(string recipName, string recipDes, string[] compIds, string[] compweights, string recipCalory, string recipprotein, string recipcarbo)
         {
+
             Recipe recipe = new Recipe();
             recipe.Name = recipName;
             recipe.Description = recipDes;
 
 
-            RecipComponent[] Recips_connect = new RecipComponent[compIds.Length];
 
-           
+            /// Do poprawy zmiana formy ze string 
+           recipe.Calories =  Convert.ToDouble(recipCalory.Replace('.',','));
+           recipe.Protein = Convert.ToDouble(recipprotein.Replace('.', ','));
+           recipe.Carbohydrates = Convert.ToDouble(recipcarbo.Replace('.', ','));
+
+
+          
+
+            
+
+
+            #region ToRepair
+            List<RecipComponent> Recips_connect = new List<RecipComponent>();
+
+
 
             for (int i = 0; i < compIds.Length; i++)
             {
@@ -252,24 +324,48 @@ namespace OneweekNutrition.Controllers
                 S_connect.Weight = weight;
 
 
-                Recips_connect[i] = S_connect;
+                Recips_connect.Add(S_connect);
             }
+            Replace_Recip_Img(recipe.Name);
 
-            recipe.Components= Recips_connect;
+            recipe.RecipComponents = Recips_connect;
 
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
 
+
+            #endregion
+
             //Przenoszenia zdjecia dodać !!!!!!!!
-
-
-
 
 
             return Json("Tescik");
         }
 
 
+
+
+
+        private string Replace_Recip_Img(string Img_Name)
+        {
+
+            string filename = "2.jpeg";
+
+
+            string imagepath = GetActualpath(filename);
+
+            string R_imagepath = imagepath.Replace("Temporary", "Recips").Replace("2.jpeg", Img_Name + ".jpeg");
+
+            if (System.IO.File.Exists(imagepath))
+            {
+                System.IO.File.Copy(imagepath, R_imagepath);
+                System.IO.File.Delete(imagepath);
+            }
+
+
+            return R_imagepath;
+
+        }
 
 
 

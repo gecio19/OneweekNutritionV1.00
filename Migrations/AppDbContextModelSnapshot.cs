@@ -51,18 +51,18 @@ namespace OneweekNutrition.Migrations
 
             modelBuilder.Entity("OneweekNutrition.Models.RecipComponent", b =>
                 {
-                    b.Property<int>("CompId")
+                    b.Property<int>("RecipId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RecipId")
+                    b.Property<int>("ComponentID")
                         .HasColumnType("int");
 
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
-                    b.HasKey("CompId", "RecipId");
+                    b.HasKey("RecipId", "ComponentID");
 
-                    b.HasIndex("RecipId");
+                    b.HasIndex("ComponentID");
 
                     b.ToTable("RecipComponent");
                 });
@@ -73,11 +73,11 @@ namespace OneweekNutrition.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("Calories")
-                        .HasColumnType("int");
+                    b.Property<double?>("Calories")
+                        .HasColumnType("double");
 
-                    b.Property<int?>("Carbohydrates")
-                        .HasColumnType("int");
+                    b.Property<double?>("Carbohydrates")
+                        .HasColumnType("double");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -87,24 +87,71 @@ namespace OneweekNutrition.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("Protein")
-                        .HasColumnType("int");
+                    b.Property<double?>("Protein")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("OneweekNutrition.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("PPM")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OneweekNutrition.Models.UserRecipe", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EatDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserRecipeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RecipId");
+
+                    b.HasIndex("RecipId");
+
+                    b.ToTable("UserRecipe");
+                });
+
             modelBuilder.Entity("OneweekNutrition.Models.RecipComponent", b =>
                 {
                     b.HasOne("OneweekNutrition.Models.Component", "Component")
-                        .WithMany("Recips")
-                        .HasForeignKey("CompId")
+                        .WithMany("RecipComponents")
+                        .HasForeignKey("ComponentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OneweekNutrition.Models.Recipe", "Recipe")
-                        .WithMany("Components")
+                        .WithMany("RecipComponents")
                         .HasForeignKey("RecipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -114,14 +161,40 @@ namespace OneweekNutrition.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("OneweekNutrition.Models.UserRecipe", b =>
+                {
+                    b.HasOne("OneweekNutrition.Models.Recipe", "Recipe")
+                        .WithMany("UserRecipe")
+                        .HasForeignKey("RecipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OneweekNutrition.Models.User", "User")
+                        .WithMany("UserRecipe")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OneweekNutrition.Models.Component", b =>
                 {
-                    b.Navigation("Recips");
+                    b.Navigation("RecipComponents");
                 });
 
             modelBuilder.Entity("OneweekNutrition.Models.Recipe", b =>
                 {
-                    b.Navigation("Components");
+                    b.Navigation("RecipComponents");
+
+                    b.Navigation("UserRecipe");
+                });
+
+            modelBuilder.Entity("OneweekNutrition.Models.User", b =>
+                {
+                    b.Navigation("UserRecipe");
                 });
 #pragma warning restore 612, 618
         }

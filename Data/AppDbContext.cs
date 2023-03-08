@@ -14,26 +14,51 @@ namespace OneweekNutrition.Data
         public DbSet<Component> Component { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
 
+        public DbSet<User> Users { get; set; }
 
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Entity<RecipComponent>()
-                .HasKey(x => new {x.CompId, x.RecipId});
-            builder.Entity<RecipComponent>()
-                .HasOne(x => x.Component)
-                .WithMany(x => x.Recips)
-                .HasForeignKey(x => x.CompId);
+            modelBuilder.Entity<RecipComponent>()
+                .HasKey(bc => new {bc.RecipId, bc.ComponentID });
 
-            builder.Entity<RecipComponent>()
-                   .HasOne(x => x.Recipe)
-                   .WithMany(x => x.Components)
-                   .HasForeignKey(x => x.RecipId);
-                
+            modelBuilder.Entity<RecipComponent>()
+                .HasOne(bc => bc.Recipe)
+                .WithMany(b => b.RecipComponents)
+                .HasForeignKey(bc => bc.RecipId);
+
+            modelBuilder.Entity<RecipComponent>()
+                .HasOne(bc => bc.Component)
+                .WithMany(b => b.RecipComponents)
+                .HasForeignKey(bc => bc.ComponentID);
+
+
+
+            // User-Recip
+
+            modelBuilder.Entity<UserRecipe>()
+                .HasKey(u => new { u.UserId, u.RecipId });
+
+            modelBuilder.Entity<UserRecipe>()
+                .HasOne(u => u.User)
+                .WithMany(d => d.UserRecipe)
+                .HasForeignKey(u => u.UserId);
+
+            modelBuilder.Entity<UserRecipe>()
+                .HasOne(u => u.Recipe)
+                .WithMany(d => d.UserRecipe)
+                .HasForeignKey(u => u.RecipId);
+
+
+            
+
+
+
+
+
+
+
+
         }
-
-
-
-
     }
 }

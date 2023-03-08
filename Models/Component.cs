@@ -27,8 +27,10 @@ namespace OneweekNutrition.Models
 
         public string? ImgPath { get; set; }
 
-        public ICollection<RecipComponent>  Recips { get; set; }
 
+       // public List<Recipe> Recipes { get; set; }
+
+        public List<RecipComponent> RecipComponents { get; set; }
     }
 
 

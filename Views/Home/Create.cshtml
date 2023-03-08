@@ -15,12 +15,6 @@
 
 
 
-
-
-
-
-
-
 <div>
     <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Close" onclick="PopUp()">
         Add New
@@ -34,6 +28,7 @@
     <div id="Dodawanie">
 
     </div>
+
     @Html.Partial("~/Views/Master/NewComponent.cshtml")
 </div>
 
@@ -528,14 +523,23 @@
                                             // Produc id and Produc weight
         var Recip_Des = $('#RecipDesc').val(); // +
 
-                                       
+
+        var Recip_calory = $('#CalBar').text();
+        var Recip_protein = $('#ProtBar').text();
+        var Recip_carbo = $('#CarbBar').text();
+
 
         let formData = {
 
             recipName: Recip_N,
             recipDes: Recip_Des,
             compIds: Product_ids,
-            compweights :Product_weights
+            compweights :Product_weights,
+            recipCalory: Recip_calory,
+            recipprotein: Recip_protein,
+            recipcarbo:Recip_carbo
+
+
         }
 
 
@@ -780,6 +784,7 @@
 
             }
         }
+
         function PopUp()
     {
 

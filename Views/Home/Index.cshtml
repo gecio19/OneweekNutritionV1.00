@@ -1,8 +1,351 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<h2>Przepisy</h2>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div id="RecipDiv" >
+
+
+
+
+
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="uploadRecipUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form id="RecipUserForm">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="RecipUserAdding">Dodaj przepis</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="ModalRecipUser_Hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+                    <div class="row">
+                        
+                            <br />
+
+                        <h5 id="UserRecipName">Nazwa </h5>
+
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" onchange="NullSwapDef()" type="checkbox" role="switch" id="ThisWeekcheckbox" checked>
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Ten tydzień</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" onchange="NullSwapDef()" type="checkbox" role="switch" id="NextWeekcheckbox">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Następny tydzień</label>
+                        </div>
+                            
+
+                          <select   class="drop_down_H_recip" id="UserRecipDay" >
+                                <option value="0">Dzien</option>
+                                <option value="1">Poniedziałek</option>
+                                <option value="2">Wtorek</option>
+                                <option value="3">Środa</option>
+                                <option value="4">Czwartek</option>
+                                <option value="5">Piątek</option>
+                                <option value="6">Sobota</option>
+                                <option value="7">Niedziela</option>
+                          </select>
+
+                        <select class="drop_down_H_recip" id="UserRecipHour">
+                                <option value="0">Godzina</option>
+                                <option value="1">8:00</option>
+                                <option value="2">9:00</option>
+                                <option value="3">10:00</option>
+                                <option value="4">11:00</option>
+                                <option value="5">12:00</option>
+                                <option value="6">13:00</option>
+                                <option value="7">14:00</option>
+                                <option value="8">15:00</option>
+                                <option value="9">16:00</option>
+                                <option value="10">17:00</option>
+                                <option value="11">18:00</option>
+                                <option value="12">19:00</option>
+                                <option value="13">20:00</option>
+                                <option value="14">21:00</option>
+                                <option value="15">22:00</option>
+                        </select>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" onclick="UploadUserRecip()" class="btn btn-success" data-dismiss="modal">Dodaj</a>
+                    <input type="hidden" id="currentemcode" value="1" />
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+
+
+
+<style>
+    .BG_Color{
+       background-color:burlywood;
+    }
+
+
+    .drop_down_H_recip
+    {
+        position:relative;
+        height:30%;
+        width:30%;
+    }
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+    let day;
+    let hour;
+    let RecipId;
+
+
+
+
+
+    $(document).ready(function(){
+
+        ShowAllRecip();
+        UserDetails();
+     });
+
+
+     function UserDetails()
+     {
+     
+
+        $.ajax({
+            url: "/Access/ActualUser",
+            type: "POST",
+            success: function (response) {
+
+                console.log(response);
+
+
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+
+        });
+     }
+
+     function ModalRecipUser_Show(element)
+     {
+        $('#uploadRecipUser').modal('show');
+
+        $("#UserRecipName").text(element.name);
+        RecipId = element.value;
+
+        console.log(element.name);
+
+
+     }
+
+     function ModalRecipUser_Hide()
+     {
+
+         $('#uploadRecipUser').modal('hide');
+
+     }
+
+
+     function UploadUserRecip()
+     {
+
+        var e = document.getElementById("UserRecipDay");
+        day = e.value;
+        var e = document.getElementById("UserRecipHour");
+        hour = e.options[e.selectedIndex].text;
+        var _thisweek = $("#ThisWeekcheckbox").prop("checked");
+        var _nextweek = $("#NextWeekcheckbox").prop("checked");
+
+
+       
+
+
+        
+        let formData = {
+            day: day,
+            hour: hour,
+            RecipId: RecipId,
+            _thisweek: _thisweek,
+            _nextweek: _nextweek
+        }
+
+        console.log(formData);
+
+         $.ajax({
+            url: "/Access/UploadRecip",
+            type: 'POST',
+            data: formData,
+            success: function (result) {
+                ModalRecipUser_Hide();
+                
+            },
+            error: function () {
+                alert("COS zle");
+            }
+        });
+
+
+
+
+
+
+         }
+
+
+    function ShowAllRecip()
+    {
+
+
+
+
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "ShowAllRecips",
+            success: function (data) {
+
+                var result = "";
+                var compDiv = $("#RecipDiv");
+
+                $.each(data, function (id, Recip) {
+
+
+
+                    result +=
+                        '<button class="button   BG_Color "   Name="' + Recip.name + '"    id="CompButt"  value="' + Recip.id + '"  onclick="ModalRecipUser_Show(this)"   >' +
+                        '<div class="overbase">' +
+
+                        'Kalorie:' + Recip.calories + '<br />' +
+                        'Białko:' + Recip.protein + '<br />' +
+                        'Węglowodany:' + Recip.carbohydrates +
+                        ' </div>' +
+                        '<div class="base">' +
+                        '<img src=' + '/Uploads/Recips/' + Recip.name + '.jpeg' + '   ' + 'width = "150" height = "100" />' +
+                        '<br />' +
+                        Recip.name +
+                        '</div>' +
+                        '   </button>';
+                });
+
+                compDiv.html(result);
+
+
+
+
+
+
+
+
+
+
+
+
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve books.');
+            }
+        });
+
+
+
+
+    }
+
+
+
+
+    function NullSwapDef()
+    {
+
+        if($("#ThisWeekcheckbox").prop("checked") == false)
+        {
+            $("#NextWeekcheckbox").prop('checked', true);
+        }
+        else{}
+    }
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

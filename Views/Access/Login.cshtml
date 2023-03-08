@@ -1,0 +1,100 @@
+﻿@model OneweekNutrition.Models.User;
+
+
+
+@{
+    Layout = null;
+}
+
+
+<meta charset="utf-8" />
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OneweekNutrition</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/OneweekNutrition.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+</head>
+
+
+
+    <form asp-controller="Access" asp-action="Login" method="post">
+        <h1>Login</h1>
+        <input  placeholder="Login" asp-for="Login" />
+        <input type="password" placeholder="Password" asp-for="Password" />
+
+        <button type="submit">login</button>
+
+    @if (ViewData["ValidateMessage"] != null)
+    {
+                <br />
+                    <br />
+                <label>@ViewData["ValidateMessage"]</label>
+    }
+
+    </form>
+
+    <div>
+         @Html.Partial("~/Views/Access/UserRegistration.cshtml")
+
+    </div>
+
+
+
+
+
+<button type="button" class="btn btn-info" onclick="ShowRegister()">Registration</button>
+
+
+
+
+<script>
+
+
+       function ShowRegister()
+    {
+        $('#uploadUser').modal('show');
+
+    }
+
+
+    function HideRegister() {
+        $('#uploadUser').modal('hide');
+
+    }
+
+
+
+    function RegisterUser()
+    {
+        var formData = $("#UserForm").serialize();
+
+        $.ajax({
+            url: "/Access/RegisterUser",
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                $('#UserForm')[0].reset();
+                HideRegister();
+
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+
+        });
+
+
+
+
+    }
+
+
+</script>
