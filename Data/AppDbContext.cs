@@ -20,7 +20,7 @@ namespace OneweekNutrition.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecipComponent>()
-                .HasKey(bc => new {bc.RecipId, bc.ComponentID });
+                 .HasKey(bc => new { bc.RecipId, bc.ComponentID });
 
             modelBuilder.Entity<RecipComponent>()
                 .HasOne(bc => bc.Recipe)
@@ -37,27 +37,19 @@ namespace OneweekNutrition.Data
             // User-Recip
 
             modelBuilder.Entity<UserRecipe>()
-                .HasKey(u => new { u.UserId, u.RecipId });
+                .HasKey(u => new { u.ID });
 
             modelBuilder.Entity<UserRecipe>()
                 .HasOne(u => u.User)
                 .WithMany(d => d.UserRecipe)
                 .HasForeignKey(u => u.UserId);
 
+
+
             modelBuilder.Entity<UserRecipe>()
                 .HasOne(u => u.Recipe)
                 .WithMany(d => d.UserRecipe)
                 .HasForeignKey(u => u.RecipId);
-
-
-            
-
-
-
-
-
-
-
 
         }
     }

@@ -123,21 +123,24 @@ namespace OneweekNutrition.Migrations
 
             modelBuilder.Entity("OneweekNutrition.Models.UserRecipe", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipId")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EatDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("UserRecipeID")
+                    b.Property<int>("RecipId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "RecipId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("RecipId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRecipe");
                 });

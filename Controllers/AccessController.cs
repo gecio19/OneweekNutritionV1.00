@@ -10,10 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Globalization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace OneweekNutrition.Controllers
 {
@@ -21,11 +17,6 @@ namespace OneweekNutrition.Controllers
     {
 
         private readonly AppDbContext _context;
-
-
-
-
-
 
 
         public AccessController(AppDbContext context)
@@ -56,7 +47,7 @@ namespace OneweekNutrition.Controllers
             var LUser = _context.Users
                 .Where(n => n.Login == modelLogin.Login)
                 .FirstOrDefault();
-            if(LUser == null)
+            if (LUser == null)
             {
                 ViewData["ValidateMessage"] = "user not found";
                 return View();
@@ -115,7 +106,7 @@ namespace OneweekNutrition.Controllers
 
             var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var _user = _context.Users.Where(n=> n.Login == userlogin).FirstOrDefault();
+            var _user = _context.Users.Where(n => n.Login == userlogin).FirstOrDefault();
 
 
             return Json(_user);
@@ -126,7 +117,7 @@ namespace OneweekNutrition.Controllers
         public JsonResult UploadRecip(string day, string hour, string RecipId, bool _thisweek, bool _nextweek)
         {
 
-           
+
 
 
 
@@ -135,16 +126,16 @@ namespace OneweekNutrition.Controllers
             var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var _usertoUpdate = _context.Users.Where(n => n.Login == userlogin)
-                .Include(c=> c.UserRecipe)
+                .Include(c => c.UserRecipe)
                 .FirstOrDefault();
-            
+
 
 
 
             User UpdatedUser = new User();
             UpdatedUser.Id = _usertoUpdate.Id;
             UpdatedUser.Login = _usertoUpdate.Login;
-            UpdatedUser.Password = _usertoUpdate.Password; 
+            UpdatedUser.Password = _usertoUpdate.Password;
             UpdatedUser.Name = _usertoUpdate.Name;
             UpdatedUser.PPM = _usertoUpdate.PPM;
 
@@ -174,7 +165,7 @@ namespace OneweekNutrition.Controllers
                 User = _context.Users.FirstOrDefault(x => x.Id == UpdatedUser.Id),
                 Recipe = _context.Recipes.FirstOrDefault(x => x.Id == Int32.Parse(RecipId)),
                 EatDate = Final_date
-            }) ;
+            });
 
 
 
@@ -184,7 +175,7 @@ namespace OneweekNutrition.Controllers
 
 
 
-          
+
 
             return Json("OK");
         }
@@ -192,8 +183,8 @@ namespace OneweekNutrition.Controllers
 
         public void DateReturn(string day, string hour, bool _thisweek, bool _nextweek)
         {
-            string _ActualWeek = (_thisweek = true) ? "1" : "0";
-            string _NextWeek = (_nextweek = true) ? "1" : "0";
+            string _ActualWeek = (_thisweek == true) ? "1" : "0";
+            string _NextWeek = (_nextweek == true) ? "1" : "0";
 
             string DateTime = _ActualWeek + _NextWeek;
 
@@ -217,7 +208,7 @@ namespace OneweekNutrition.Controllers
                 case "01":
 
                     break;
-                 
+
             }
 
 
@@ -236,7 +227,36 @@ namespace OneweekNutrition.Controllers
 
 
 
+        public JsonResult Clear_outdated()
+        {
+            /* var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+             var _userDB = _context.Users.Where(n => n.Login == userlogin)
+                 .Include(c => c.UserRecipe)
+                 .FirstOrDefault().UserRecipe;
+
+             foreach (var item in _userDB)
+             {
+
+                 if(item.EatDate.AddDays(7) <= DateTime.Now )
+                 {
+                     int a = 3;
+
+                     _context.Remove(item);
+
+
+                 }
+
+
+
+             }
+
+             _context.SaveChanges();*/
+
+
+
+            return Json("JEstak");
+        }
 
 
 
@@ -253,7 +273,7 @@ namespace OneweekNutrition.Controllers
                 .FirstOrDefault();
 
 
-            List<Tuple<string,Recipe>> Zapis = new List<Tuple<string, Recipe>>();
+            List<Tuple<string, Recipe>> Zapis = new List<Tuple<string, Recipe>>();
 
 
             foreach (var item in _userDB.UserRecipe)
@@ -269,7 +289,7 @@ namespace OneweekNutrition.Controllers
                     .Where(x => x.Id == item.RecipId)
                     .FirstOrDefault();
 
-                Tuple<string, Recipe> Tup_DR = new Tuple<string, Recipe>(Day_Hour,_recip);
+                Tuple<string, Recipe> Tup_DR = new Tuple<string, Recipe>(Day_Hour, _recip);
 
 
 
@@ -298,7 +318,7 @@ namespace OneweekNutrition.Controllers
 
             List<string> Listka = new List<string>();
 
-            List<Tuple<string,string>> Tuplaetest = new List<Tuple<string,string>>();
+            List<Tuple<string, string>> Tuplaetest = new List<Tuple<string, string>>();
 
 
 

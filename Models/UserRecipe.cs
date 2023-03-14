@@ -5,7 +5,7 @@ namespace OneweekNutrition.Models
     public class UserRecipe
     {
         [Key]
-        public int UserRecipeID { get; set; }
+        public int ID { get; set; }
 
         public DateTime EatDate { get; set; }
 

@@ -11,8 +11,8 @@ using OneweekNutrition.Data;
 namespace OneweekNutrition.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230308205646_Initial")]
-    partial class Initial
+    [Migration("20230314110937_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,21 +125,24 @@ namespace OneweekNutrition.Migrations
 
             modelBuilder.Entity("OneweekNutrition.Models.UserRecipe", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipId")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EatDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("UserRecipeID")
+                    b.Property<int>("RecipId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "RecipId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("RecipId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRecipe");
                 });

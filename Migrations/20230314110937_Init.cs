@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OneweekNutrition.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -104,14 +104,15 @@ namespace OneweekNutrition.Migrations
                 name: "UserRecipe",
                 columns: table => new
                 {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EatDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    RecipId = table.Column<int>(type: "int", nullable: false),
-                    UserRecipeID = table.Column<int>(type: "int", nullable: false),
-                    EatDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    RecipId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRecipe", x => new { x.UserId, x.RecipId });
+                    table.PrimaryKey("PK_UserRecipe", x => x.ID);
                     table.ForeignKey(
                         name: "FK_UserRecipe_Recipes_RecipId",
                         column: x => x.RecipId,
@@ -136,6 +137,11 @@ namespace OneweekNutrition.Migrations
                 name: "IX_UserRecipe_RecipId",
                 table: "UserRecipe",
                 column: "RecipId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRecipe_UserId",
+                table: "UserRecipe",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
