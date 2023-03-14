@@ -229,29 +229,21 @@ namespace OneweekNutrition.Controllers
 
         public JsonResult Clear_outdated()
         {
-            /* var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-             var _userDB = _context.Users.Where(n => n.Login == userlogin)
-                 .Include(c => c.UserRecipe)
-                 .FirstOrDefault().UserRecipe;
+            var _userDB = _context.Users.Where(n => n.Login == userlogin)
+                .Include(c => c.UserRecipe)
+                .FirstOrDefault().UserRecipe;
 
-             foreach (var item in _userDB)
-             {
+            foreach (var item in _userDB)
+            {
+                if (item.EatDate.AddDays(7) <= DateTime.Now)
+                {
+                    _context.Remove(item);
+                }
+            }
 
-                 if(item.EatDate.AddDays(7) <= DateTime.Now )
-                 {
-                     int a = 3;
-
-                     _context.Remove(item);
-
-
-                 }
-
-
-
-             }
-
-             _context.SaveChanges();*/
+            _context.SaveChanges();
 
 
 
