@@ -3,6 +3,19 @@
 
 
 
+@{
+    DayOfWeek currentDay = DateTime.Now.DayOfWeek;
+    int daysTillCurrentDay = currentDay - DayOfWeek.Monday;
+    DateTime currentWeekStartDate = DateTime.Now.AddDays(-daysTillCurrentDay);
+}
+
+
+
+<button onclick="changeWeek()">
+    Next Week
+</button>
+
+
 
 <div class="container">
     <div class="timetable-img text-center">
@@ -15,13 +28,53 @@
                     <th class="text-uppercase">
                         Time
                     </th>
-                    <th class="text-uppercase">Monday</th>
-                    <th class="text-uppercase">Tuesday</th>
-                    <th class="text-uppercase">Wednesday</th>
-                    <th class="text-uppercase">Thursday</th>
-                    <th class="text-uppercase">Friday</th>
-                    <th class="text-uppercase">Saturday</th>
-                    <th class="text-uppercase">Sunday</th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.ToString().Substring(0,5)">
+
+                        Monday
+                        <br />
+                        @currentWeekStartDate.ToString().Substring(0,5)
+                    
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(1).ToString().Substring(0,5)">
+                        Tuesday
+                        <br />
+                        @currentWeekStartDate.AddDays(1).ToString().Substring(0,5)
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(2).ToString().Substring(0,5)">
+                        Wednesday
+                        <br />
+                        @currentWeekStartDate.AddDays(2).ToString().Substring(0,5)
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(3).ToString().Substring(0,5)">
+                        Thursday
+                        <br />
+                        @currentWeekStartDate.AddDays(3).ToString().Substring(0,5)
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(4).ToString().Substring(0,5)">
+                        Friday
+                        <br />
+                        @currentWeekStartDate.AddDays(4).ToString().Substring(0,5)
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(5).ToString().Substring(0,5)">
+                        Saturday
+                        <br />
+                        @currentWeekStartDate.AddDays(5).ToString().Substring(0,5)
+                    </th>
+
+                    <th class="text-uppercase" id="I @currentWeekStartDate.AddDays(6).ToString().Substring(0,5)">
+                        Sunday
+                        <br />
+                        @currentWeekStartDate.AddDays(6).ToString().Substring(0,5)
+                    </th>
+
+                   
+
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +93,7 @@
                     </td>
                     <td id="Friday9">
                     </td>
-                    <td id="SOB9">
+                    <td id="Saturday9">
                     </td>
 
                     <td id="Sunday9">
@@ -63,7 +116,7 @@
                     </td>
                     <td id="Friday10">
                     </td>
-                    <td id="SOB10">
+                    <td id="Saturday10">
                     </td>
 
                     <td id="Sunday10">
@@ -85,7 +138,7 @@
                     </td>
                     <td id="Friday11">
                     </td>
-                    <td id="SOB11">
+                    <td id="Saturday11">
                     </td>
 
                     <td id="Sunday11">
@@ -107,7 +160,7 @@
                     </td>
                     <td id="Friday12">
                     </td>
-                    <td id="SOB12">
+                    <td id="Saturday12">
                     </td>
 
                     <td id="Sunday12">
@@ -128,7 +181,7 @@
                     </td>
                     <td id="Friday13">
                     </td>
-                    <td id="SOB13">
+                    <td id="Saturday13">
                     </td>
 
                     <td id="Sunday13">
@@ -149,7 +202,7 @@
                     </td>
                     <td id="Friday14">
                     </td>
-                    <td id="SOB14">
+                    <td id="Saturday14">
                     </td>
 
                     <td id="Sunday14">
@@ -171,7 +224,7 @@
                     </td>
                     <td id="Friday15">
                     </td>
-                    <td id="SOB15">
+                    <td id="Saturday15">
                     </td>
 
                     <td id="Sunday15">
@@ -192,7 +245,7 @@
                     </td>
                     <td id="Friday16">
                     </td>
-                    <td id="SOB16">
+                    <td id="Saturday16">
                     </td>
 
                     <td id="Sunday16">
@@ -213,7 +266,7 @@
                     </td>
                     <td id="Friday17">
                     </td>
-                    <td id="SOB17">
+                    <td id="Saturday17">
                     </td>
 
                     <td id="Sunday17">
@@ -236,7 +289,7 @@
                     </td>
                     <td id="Friday18">
                     </td>
-                    <td id="SOB18">
+                    <td id="Saturday18">
                     </td>
 
                     <td id="Sunday18">
@@ -257,7 +310,7 @@
                     </td>
                     <td id="Friday19">
                     </td>
-                    <td id="SOB19">
+                    <td id="Saturday19">
                     </td>
 
                     <td id="Sunday19">
@@ -279,7 +332,7 @@
                     </td>
                     <td id="Friday20">
                     </td>
-                    <td id="SOB20">
+                    <td id="Saturday20">
                     </td>
 
                     <td id="Sunday20">
@@ -301,7 +354,7 @@
                     </td>
                     <td id="Friday21">
                     </td>
-                    <td id="SOB21">
+                    <td id="Saturday21">
                     </td>
 
                     <td id="Sunday21">
@@ -323,7 +376,7 @@
                     </td>
                     <td id="Friday22">
                     </td>
-                    <td id="SOB22">
+                    <td id="Saturday22">
                     </td>
 
                     <td id="Sunday22">
@@ -487,9 +540,74 @@
 <script>
     $(document).ready(function () {
         LoadPlan();
+
+        if (document.cookie == '1')
+        {
+        UndoPlan();
+        setTimeout(updateIds_next, 25);
+        setTimeout(LoadPlan,50);
+
+        }
     });
 
 
+
+
+    function changeWeek()
+    {
+        if (document.cookie == '0') {
+        UndoPlan();
+        setTimeout(updateIds_next, 25);
+        setTimeout(LoadPlan,50);
+        document.cookie = 1;
+        }
+        else
+        {
+            UndoPlan();
+            setTimeout(updateIds_back, 25);
+            setTimeout(LoadPlan, 50);
+            document.cookie = 0;
+        }
+        
+
+    }
+
+    function updateIds_next()
+    {
+        var tr = document.querySelector("body > div > main > div > div.table-responsive > table > thead > tr");
+        for (let i = 1; i < 8; i++) {
+
+            var pageId = tr.children[i].id.toString().split('.');
+            var numId = Number(pageId[0].split(' ')[1]) + 7;
+
+            var des = tr.children[i].innerHTML;
+            var finalDes = des.replace(tr.children[i].id.toString().split(" ")[1], numId + '.' + pageId[1]);
+
+            tr.children[i].innerHTML = finalDes;
+
+            tr.children[i].id = "I " + numId + '.' + pageId[1];
+
+        }
+
+
+    }
+
+    function updateIds_back() {
+        var tr = document.querySelector("body > div > main > div > div.table-responsive > table > thead > tr");
+        for (let i = 1; i < 8; i++) {
+
+            var pageId = tr.children[i].id.toString().split('.');
+            var numId = Number(pageId[0].split(' ')[1]) - 7;
+
+            var des = tr.children[i].innerHTML;
+            var finalDes = des.replace(tr.children[i].id.toString().split(" ")[1], numId + '.' + pageId[1]);
+
+            tr.children[i].innerHTML = finalDes;
+
+            tr.children[i].id = "I " + numId + '.' + pageId[1];
+
+        }
+    }
 
 
 
@@ -498,12 +616,22 @@
             url: "/Access/SchedulItems",
             type: 'GET',
             success: function (result) {
-                //console.log(result[0])
                 $.each(result, function (id, Recip) {
-                    //console.log(Recip.item1) // GoooD good Wednesday11
+                  
                     result =
                         '<span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">' + Recip.item2 + '</span>'
-                    $("#" + Recip.item1).html(result);
+
+
+                    let podzialka = Recip.item3.toString().split('.');
+                    let cos = "I\\ " + podzialka[0]+ "\\." + podzialka[1];
+
+
+                    var el = document.querySelector("#" + cos);
+
+                    
+                    if(el != null){
+                        $("#" + Recip.item1).html(result);
+                    }
                 });
             },
             error: function () {
@@ -511,6 +639,41 @@
             }
         });
     }
+
+
+    function UndoPlan() {
+        $.ajax({
+            url: "/Access/SchedulItems",
+            type: 'GET',
+            success: function (result) {
+               
+                $.each(result, function (id, Recip) {
+                  
+                    result =
+                        '<span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">' + Recip.item2 + '</span>'
+
+
+                    let podzialka = Recip.item3.toString().split('.');
+                    let cos = "I\\ " + podzialka[0]+ "\\." + podzialka[1];
+
+
+                    var el = document.querySelector("#" + cos);
+
+                    
+                    if(el != null){
+                        $("#" + Recip.item1).html("");
+                    }
+                });
+            },
+            error: function () {
+                alert("COS zle");
+            }
+        });
+    }
+
+
+
+
 
 
 </script>

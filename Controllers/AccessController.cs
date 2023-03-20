@@ -118,11 +118,6 @@ namespace OneweekNutrition.Controllers
         {
 
 
-
-
-
-
-
             var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var _usertoUpdate = _context.Users.Where(n => n.Login == userlogin)
@@ -144,20 +139,38 @@ namespace OneweekNutrition.Controllers
 
 
 
-
-
-
-
             //////////////////////////Do zrobienia w Funkcji to żeby na next week dało sie wybierac i na obecny///////////////////////////////////
-            var DayofWeek_format = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), day);
-            var EatDay_Closest = GetNextWeekday(DayofWeek_format);
+            var DayofWeek_format = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), day); // Zwara Monday
+
+
+            DateTime EatDay_Closest;
+
+            if (_thisweek && _nextweek)
+            {
+                //  var cos = ThisWeekMonday(DayofWeek_format);
+                EatDay_Closest = ThisWeekMonday(DayofWeek_format, 0); 
+
+            }
+            else if (_thisweek) // dla tego
+            {
+                EatDay_Closest = ThisWeekMonday(DayofWeek_format,0); //{13.03.2023 23:24:40}
+
+            }
+            else // dla nastepnego
+            {
+                EatDay_Closest = ThisWeekMonday(DayofWeek_format,7); 
+
+            }
+
+
+
+            // var EatDay_Closest = GetNextWeekday(DayofWeek_format); // zwraca {20.03.2023 23:05:53}
+
 
 
             DateTime Final_date = new DateTime(EatDay_Closest.Year, EatDay_Closest.Month, EatDay_Closest.Day, Int32.Parse(hour.Split(":")[0]), 0, 0);
 
             /////////////////////////////////////////
-
-
 
 
             UpdatedUser.UserRecipe.Add(new UserRecipe
@@ -167,18 +180,62 @@ namespace OneweekNutrition.Controllers
                 EatDate = Final_date
             });
 
-
-
             _context.Entry(_usertoUpdate).CurrentValues.SetValues(UpdatedUser);
             _context.SaveChanges();
 
-
-
-
-
-
             return Json("OK");
         }
+
+
+
+
+
+        public  DateTime ThisWeekMonday(DayOfWeek dow , int nextwek)
+        {
+            var today = DateTime.Now;
+
+            //var dow = DateTime.Now.DayOfWeek;
+
+            switch (dow)
+            {
+                case DayOfWeek.Monday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 1 + nextwek);
+                    break;
+                case DayOfWeek.Tuesday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 2 + nextwek);
+                    break;
+                case DayOfWeek.Wednesday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 3 + nextwek );
+                    break;
+                case DayOfWeek.Thursday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 4 + nextwek);
+                    break;
+                case DayOfWeek.Friday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 5 + nextwek);
+                    break;
+                case DayOfWeek.Saturday:
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 6 + nextwek);
+                    break;
+                default: // Return Sunday
+                    return new GregorianCalendar().AddDays(today, -((int)today.DayOfWeek) + 7 + nextwek);
+                    break;
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         public void DateReturn(string day, string hour, bool _thisweek, bool _nextweek)
@@ -234,7 +291,6 @@ namespace OneweekNutrition.Controllers
             var _userDB = _context.Users.Where(n => n.Login == userlogin)
                 .Include(c => c.UserRecipe)
                 .FirstOrDefault().UserRecipe;
-
             foreach (var item in _userDB)
             {
                 if (item.EatDate.AddDays(7) <= DateTime.Now)
@@ -242,11 +298,7 @@ namespace OneweekNutrition.Controllers
                     _context.Remove(item);
                 }
             }
-
             _context.SaveChanges();
-
-
-
             return Json("JEstak");
         }
 
@@ -310,7 +362,7 @@ namespace OneweekNutrition.Controllers
 
             List<string> Listka = new List<string>();
 
-            List<Tuple<string, string>> Tuplaetest = new List<Tuple<string, string>>();
+            List<Tuple<string, string,string>> Tuplaetest = new List<Tuple<string, string,string>>();
 
 
 
@@ -327,9 +379,13 @@ namespace OneweekNutrition.Controllers
 
 
 
+                // DataDania
+                var Day_Month = item.EatDate.ToString().Substring(0, 5);
 
 
-                Tuple<string, string> TEstowa = new Tuple<string, string>(Day_Hour, DishName);
+
+
+                Tuple<string, string,string> TEstowa = new Tuple<string, string,string>(Day_Hour, DishName, Day_Month);
 
 
                 Tuplaetest.Add(TEstowa);
