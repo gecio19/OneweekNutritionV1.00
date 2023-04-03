@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\Js\" />
+    <Folder Include="Views\Scripts\Js\" />
     <Folder Include="wwwroot\Uploads\Constant\" />
     <Folder Include="wwwroot\Uploads\Recips\" />
     <Folder Include="wwwroot\Uploads\Temporary\" />

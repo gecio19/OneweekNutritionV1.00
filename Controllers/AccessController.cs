@@ -19,12 +19,12 @@ namespace OneweekNutrition.Controllers
         private readonly AppDbContext _context;
 
 
+
+
+
         public AccessController(AppDbContext context)
         {
             _context = context;
-
-
-
         }
 
 
@@ -85,6 +85,8 @@ namespace OneweekNutrition.Controllers
             }
 
 
+           
+
             ViewData["ValidateMessage"] = "user not found";
             return View();
         }
@@ -108,7 +110,7 @@ namespace OneweekNutrition.Controllers
 
             var _user = _context.Users.Where(n => n.Login == userlogin).FirstOrDefault();
 
-
+           
             return Json(_user);
         }
 
@@ -351,9 +353,6 @@ namespace OneweekNutrition.Controllers
 
         public JsonResult SchedulItems()
         {
-
-
-
             var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var _userDB = _context.Users.Where(n => n.Login == userlogin)
@@ -362,7 +361,7 @@ namespace OneweekNutrition.Controllers
 
             List<string> Listka = new List<string>();
 
-            List<Tuple<string, string,string>> Tuplaetest = new List<Tuple<string, string,string>>();
+            List<Tuple<string, string,string,double>> Tuplaetest = new List<Tuple<string, string,string,double>>();
 
 
 
@@ -377,23 +376,14 @@ namespace OneweekNutrition.Controllers
 
                 var DishName = _context.Recipes.FirstOrDefault(x => x.Id == item.RecipId).Name;
 
+                var DishCalory = _context.Recipes.FirstOrDefault(x => x.Id == item.RecipId).Calories;
 
 
                 // DataDania
                 var Day_Month = item.EatDate.ToString().Substring(0, 5);
-
-
-
-
-                Tuple<string, string,string> TEstowa = new Tuple<string, string,string>(Day_Hour, DishName, Day_Month);
-
-
+                Tuple<string, string,string,double> TEstowa = new Tuple<string, string,string,double>(Day_Hour, DishName, Day_Month, DishCalory);
                 Tuplaetest.Add(TEstowa);
                 //Listka.Add(Day_Hour);
-
-
-
-
             };
 
             List<string> Listka2 = new List<string>();

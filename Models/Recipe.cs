@@ -11,9 +11,9 @@ namespace OneweekNutrition.Models
 
         public string Description { get; set; }
 
-        public Double? Calories { get; set; }
-        public Double? Carbohydrates { get; set; }
-        public Double? Protein { get; set; }
+        public Double Calories { get; set; }
+        public Double Carbohydrates { get; set; }
+        public Double Protein { get; set; }
 
         //public List<Component> Components { get; set; }
 

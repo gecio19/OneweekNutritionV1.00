@@ -1,17 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using OneweekNutrition.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
-
-
-
+using OneweekNutrition.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
+builder.Services.AddTransient<ISchedulRepository, FakeSchedulRepository>();
 
 
 
@@ -24,8 +21,7 @@ builder.Services.AddAuthentication(
         option.LoginPath = "/Access/Login";
         option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 
-    })
-    ;
+    });
 
 
 
