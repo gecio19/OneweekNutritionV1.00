@@ -25,7 +25,11 @@ namespace OneweekNutrition.Controllers
 
 
 
-
+        public IActionResult RecipDetails(string id)
+        {
+            int numberMovie = Int32.Parse(id);
+            return PartialView("Modal", _schedulRepository.Getrecipe(numberMovie));
+        }
 
 
 

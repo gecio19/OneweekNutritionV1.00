@@ -39,12 +39,15 @@
 
 
                 <div class="modal-body">
+
                     <div class="row">
-                        
                             <br />
 
-                        <h5 id="UserRecipName">Nazwa </h5>
 
+
+
+                <div style="width: 50%; float:left">
+                        <h5 id="UserRecipName">Nazwa </h5>
                         <div class="form-check form-switch">
                             <input class="form-check-input" onchange="NullSwapDef()" type="checkbox" role="switch" id="ThisWeekcheckbox" checked>
                             <label class="form-check-label" for="flexSwitchCheckChecked">Ten tydzień</label>
@@ -54,7 +57,6 @@
                             <label class="form-check-label" for="flexSwitchCheckChecked">Następny tydzień</label>
                         </div>
                             
-
                           <select   class="drop_down_H_recip" id="UserRecipDay" >
                                 <option value="0">Dzien</option>
                                 <option value="1">Poniedziałek</option>
@@ -65,25 +67,42 @@
                                 <option value="6">Sobota</option>
                                 <option value="7">Niedziela</option>
                           </select>
+                </div>
 
-                        <select class="drop_down_H_recip" id="UserRecipHour">
-                                <option value="0">Godzina</option>
-                                <option value="1">8:00</option>
-                                <option value="2">9:00</option>
-                                <option value="3">10:00</option>
-                                <option value="4">11:00</option>
-                                <option value="5">12:00</option>
-                                <option value="6">13:00</option>
-                                <option value="7">14:00</option>
-                                <option value="8">15:00</option>
-                                <option value="9">16:00</option>
-                                <option value="10">17:00</option>
-                                <option value="11">18:00</option>
-                                <option value="12">19:00</option>
-                                <option value="13">20:00</option>
-                                <option value="14">21:00</option>
-                                <option value="15">22:00</option>
-                        </select>
+
+                <div style="width: 50%; float:right">
+                        <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" >
+                              <label class="form-check-label" for="flexRadioDefault1">
+                                Śniadanie
+                              </label>
+                        </div>
+
+                        <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
+                              <label class="form-check-label" for="flexRadioDefault2">
+                                Obiad
+                              </label>
+                        </div>
+
+                         <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+                              <label class="form-check-label" for="flexRadioDefault3">
+                                Kolacja
+                              </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" >
+                            <label class="form-check-label" for="flexRadioDefault4">
+                                Przekąska
+                            </label>
+                        </div>
+                </div>
+
+
+
+
 
 
                     </div>
@@ -215,19 +234,35 @@
 
         var e = document.getElementById("UserRecipDay");
         day = e.value;
-        var e = document.getElementById("UserRecipHour");
-        hour = e.options[e.selectedIndex].text;
         var _thisweek = $("#ThisWeekcheckbox").prop("checked");
         var _nextweek = $("#NextWeekcheckbox").prop("checked");
 
+        var mealTime = 0;
+        if ($('#flexRadioDefault1').is(':checked')) {
+            mealTime = 0;
+        }
 
-       
+        else if ($('#flexRadioDefault2').is(':checked')) 
+        {
+            mealTime = 1;
+        }
+        
+        else if ($('#flexRadioDefault3').is(':checked'))
+        {
+         mealTime = 2;
+         }
+        else 
+         {
+         mealTime = 3;
+         }
+
+    
 
 
         
         let formData = {
             day: day,
-            hour: hour,
+            mealTime: mealTime,
             RecipId: RecipId,
             _thisweek: _thisweek,
             _nextweek: _nextweek
@@ -247,12 +282,6 @@
                 alert("COS zle");
             }
         });
-
-
-
-
-
-
          }
 
 
@@ -329,6 +358,8 @@
         }
         else{}
     }
+
+  
 
 
 

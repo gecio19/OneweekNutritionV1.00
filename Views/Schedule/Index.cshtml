@@ -1,15 +1,11 @@
 ﻿@model List<OneweekNutrition.Models.Schedul.DayCard>
 
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 
-
-
-
-<div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-bs-ride="false">
+<div id="carouselExampleCaptions" class="carousel carousel-dark slide" data-interval="false" data-bs-ride="false">
 
     <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -21,13 +17,10 @@
 
                                                     <div class="card card_Stats">
                                                         <div class="card-body">
-                                                             Icona + @String.Format("{0:0.##}",Model[0].DayCalory)
+                                                               + @String.Format("{0:0.##}",Model[0].DayCalory)
                                                         </div>
                                                     </div>
-
                                                     <br />
-
-
                                                         @foreach (var item in Model[0].DishCards)
                                                         {
                                                           <div class="card" >
@@ -40,16 +33,18 @@
                                                           <ul class="list-group list-group-flush">
                                                               @foreach (var recip in item.Recipes)
                                                                     {
-                                                <li class="list-group-item">@recip.Name</li>
+                                                                     <li class="list-group-item"   onclick="RecipDetails(@recip.Id)" >
+                                                                        @{
+                                                                            string nazwa = recip.Name + ".jpeg";
+                                                                        }
+                                            <img src="/Uploads/Recips/@nazwa" alt="Girl in a jacket" width="50" height="60">
+                                                                         @recip.Name</li>
                                                                     }
                                                           </ul>
                                                         </div>
                                                         }
                                 </div>
                             </div>
-
-
-
 
                             @for (int i = 1; i <= 2; i++)
                                 {
@@ -75,7 +70,13 @@
                                                         <ul class="list-group list-group-flush">
                                                             @foreach (var recip in item.Recipes)
                                                             {
-                                                                <li class="list-group-item">@recip.Name</li>
+                                            <li class="list-group-item" onclick="RecipDetails(@recip.Id)">
+                                                @{
+                                                    string nazwa = recip.Name + ".jpeg";
+                                                }
+                                                <img src="/Uploads/Recips/@nazwa" alt="Girl in a jacket" width="50" height="60">
+                                                @recip.Name
+                                            </li>
                                                             }
                                                         </ul>
                                                     </div>
@@ -85,10 +86,6 @@
                                 }
                     </div>
                 </div>
-
-
-
-
 
 
         @for (int i = 1; i <= 4; i+= 3)
@@ -120,7 +117,13 @@
                                         <ul class="list-group list-group-flush">
                                             @foreach (var recip in item.Recipes)
                                             {
-                                                <li class="list-group-item">@recip.Name</li>
+                                                <li class="list-group-item" onclick="RecipDetails(@recip.Id)">
+                                                    @{
+                                                        string nazwa = recip.Name + ".jpeg";
+                                                    }
+                                                    <img src="/Uploads/Recips/@nazwa" alt="Girl in a jacket" width="50" height="60">
+                                                    @recip.Name
+                                                </li>
                                             }
                                         </ul>
                                     </div>
@@ -133,51 +136,50 @@
             </div>
             
         }
-
-
-
-                
-               
-
-
-
-           
-
-
-
-
-
-
-
-
     </div>
 </div>
 
 
 
 
-<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+<button class="carousel-control-prev carousel_NEXT_PREV" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
 </button>
-<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+<button class="carousel-control-next carousel_NEXT_PREV" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
 </button>
+
+
+
+
+
+
+<div id="partialModal" class="modal" tabindex="-1" role="dialog">
+
+
+</div>
+
+
+
+
 
 
 <style>
     .card_slide{
         margin-right:10px;
         min-height:35rem;
-
     }
 
     .card_Stats{
         background-color: rgb(228,228,228);
     }
 
-
+    .carousel_NEXT_PREV
+    {
+        width:12%;
+    }
 
 </style>
 
@@ -185,3 +187,36 @@
 
 
 
+    <script>
+
+
+   function RecipDetails(_id)
+    {
+            let formData = {
+                id:_id
+                            }
+                            $.ajax({
+                                url: "RecipDetails",
+                                type: "POST",
+                                data: formData,
+                                success: function (response)
+                                {
+                                    $("#partialModal").html(response);
+                                    $("#partialModal").modal('show');
+                                },
+                                error: function (request, status, error) {
+                                    alert(request.responseText);
+                                }
+
+                            });
+                        }
+
+
+
+
+
+
+
+
+
+    </script>

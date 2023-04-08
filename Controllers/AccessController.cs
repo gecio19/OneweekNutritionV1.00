@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Globalization;
+using System;
 
 namespace OneweekNutrition.Controllers
 {
@@ -116,12 +117,9 @@ namespace OneweekNutrition.Controllers
 
 
 
-        public JsonResult UploadRecip(string day, string hour, string RecipId, bool _thisweek, bool _nextweek)
+        public JsonResult UploadRecip(string day,int mealTime, string RecipId, bool _thisweek, bool _nextweek)
         {
-
-
             var userlogin = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var _usertoUpdate = _context.Users.Where(n => n.Login == userlogin)
                 .Include(c => c.UserRecipe)
                 .FirstOrDefault();
@@ -170,7 +168,7 @@ namespace OneweekNutrition.Controllers
 
 
 
-            DateTime Final_date = new DateTime(EatDay_Closest.Year, EatDay_Closest.Month, EatDay_Closest.Day, Int32.Parse(hour.Split(":")[0]), 0, 0);
+            DateTime Final_date = new DateTime(EatDay_Closest.Year, EatDay_Closest.Month, EatDay_Closest.Day);
 
             /////////////////////////////////////////
 
@@ -179,7 +177,8 @@ namespace OneweekNutrition.Controllers
             {
                 User = _context.Users.FirstOrDefault(x => x.Id == UpdatedUser.Id),
                 Recipe = _context.Recipes.FirstOrDefault(x => x.Id == Int32.Parse(RecipId)),
-                EatDate = Final_date
+                EatDate = Final_date,
+                MealTime = (MealTime)mealTime
             });
 
             _context.Entry(_usertoUpdate).CurrentValues.SetValues(UpdatedUser);

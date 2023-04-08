@@ -1,0 +1,69 @@
+﻿@model OneweekNutrition.Models.Schedul.Model_Recip
+
+
+
+
+
+
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">@Model.Name </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <div class="float-container">
+                <div class="float-child">
+                    <h6>Składniki</h6> <br />
+                    <ul>
+                       @for (int i = 0; i < Model.components.Count; i++)
+                        {
+                            <li> @Model.components[i].Name     @Model.weights[i] g</li>
+                        }
+
+                    </ul>
+
+                </div>
+
+                <div class="float-child">
+                    <h6> Opis</h6>
+                    @Model.description
+                </div>
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .float-container {
+        border: 3px solid #fff;
+        padding: 20px;
+    }
+
+    .float-child {
+        width: 50%;
+        position: relative;
+        float: left;
+        padding: 10px;
+    }
+
+</style>
+
+
+
+<script>
+    function hide() {
+        $("#partialModal").modal('hide');
+    }
+</script>

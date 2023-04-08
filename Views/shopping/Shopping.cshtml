@@ -1,0 +1,22 @@
+﻿  @model IEnumerable<OneweekNutrition.Models.Nowy_folder.ShoppingHelper>
+
+
+
+
+<h3> Lista zakupów </h3>
+
+
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            @item.Name   @item.weight [G]
+        </li>
+
+    }
+
+    
+
+
+</ul>
